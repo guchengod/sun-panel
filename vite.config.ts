@@ -54,8 +54,16 @@ export default defineConfig((env) => {
       },
     },
     build: {
+      outDir: 'service/web',
       reportCompressedSize: false,
       sourcemap: false,
+      // minify: 'terser',
+      rollupOptions: {
+        external: [
+          '/custom/index.js',
+          '/custom/index.css',
+        ],
+      },
       commonjsOptions: {
         ignoreTryCatch: false,
       },
