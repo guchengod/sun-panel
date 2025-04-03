@@ -1,39 +1,9 @@
-[[ 简体中文 ]](https://sun-panel-doc.enianteam.com/zh_cn/introduce/project.html) |
-[[ English ]](https://sun-panel-doc.enianteam.com/introduce/project.html)
-
 <div align=center>
-
-<img src="./doc/images/logo.png" width="100" height="100" />
-
-# Sun-Panel
-
-[![Github](https://img.shields.io/badge/Github-123456?logo=github&labelColor=242424)](https://github.com/hslr-s/sun-panel)
-[![Gitee](https://img.shields.io/badge/Gitee-123456?logo=gitee&labelColor=c71d23)](https://gitee.com/hslr/sun-panel)
-[![docker](https://img.shields.io/badge/docker-123456?logo=docker&logoColor=fff&labelColor=1c7aed)](https://hub.docker.com/r/hslr/sun-panel) 
-[![Bilibili](https://img.shields.io/badge/Bilibili-123456?logo=bilibili&logoColor=fff&labelColor=fb7299)](https://space.bilibili.com/27407696/channel/collectiondetail?sid=2023810)
-[![YouTube](https://img.shields.io/badge/YouTube-123456?logo=youtube&labelColor=ff0000)](https://www.youtube.com/channel/UCKwbFmKU25R602z6P2fgPYg)
-<br>
-[![GitHub User's stars](https://img.shields.io/github/stars/hslr-s%2Fsun-panel?style=flat&logo=github)](https://github.com/hslr-s/sun-panel)
-[![github downloads](https://img.shields.io/github/downloads/hslr-s/sun-panel/total.svg?logo=github)](https://github.com/hslr-s/sun-panel/releases)
-[![docker pulls](https://img.shields.io/docker/pulls/hslr/sun-panel.svg?logo=docker)](https://hub.docker.com/r/hslr/sun-panel)
-
-[[ 中文文档 ]](https://sun-panel-doc.enianteam.com/zh_cn) |
-[[ Document ]](https://sun-panel-doc.enianteam.com) |
-[[ Demo ]](http://sunpaneldemo.enianteam.com) 
-
 A server, NAS navigation panel, Homepage, Browser homepage.
 <br>
 一个服务器、NAS导航面板、Homepage、浏览器首页。
 
 </div>
-
-
-![](./doc/images/main-dark.png)
-
-> [!IMPORTANT]
-> In order to maintain the livelihood, the author added some [`PRO`] (https://pro.sun-panel.top) function, so the project temporarily entered a closed source state.; At present, the latest version of the open source is `v1.3.0`, [Please see the latest version of closed source](https://github.com/hslr-s/sun-panel/releases).; When the modular technology is developed, the separation of the PRO and the programs will be opened again, and the closed source will have no effect on ordinary users.; Let's look forward to open source again, and at the same time, we are welcome to supervise and review the security of the program.
-> 
-> 作者为了维持生计，增加了一些 [`PRO`](https://pro.sun-panel.top) 功能，所以项目暂时进入闭源状态。目前开源最新版本为`v1.3.0`，[闭源最新版本请查看](https://github.com/hslr-s/sun-panel/releases)。待开发出模块化技术，然后对PRO和主程序进行分离会再次开源，闭源对普通用户没有任何影响。我们一起期待再次开源吧，同时也欢迎各位大佬对程序的安全性进行监督和审查。
 
 ## 😎 Features
 
@@ -47,6 +17,13 @@ A server, NAS navigation panel, Homepage, Browser homepage.
 - 🍻 Simple usage without the need to connect to an external database
 - 🍾 Rich icon styles for free combination, supports [Iconify icon library](https://icon-sets.iconify.design/)
 - 🚁 Supports opening small windows in the webpage (some third-party websites may block this feature)
+
+## todo
+- [ ] 支持导入heimdall的导出文件
+- [ ] 支持排序模式跨分组拖动
+- [ ] 支持分组展开/折叠
+- [ ] 获取图标优化
+- [ ] 搜索优化
 
 ## 🖼️ Preview Screenshots
 
@@ -64,41 +41,96 @@ A server, NAS navigation panel, Homepage, Browser homepage.
 ![](./doc/images/window-xunlei.png)
 
 
+## 开发运行注意事项
 
-## 🐳 Deployment tutorial
-[Deployment Tutorial](https://sun-panel-doc.enianteam.com/usage/quick_deploy.html)
+## 编译前端
+```
+npm install
+npm run build
+```
+把前端编译后的dist文件夹拷贝到service/assets下
 
-## 🍵 Donate
+## 安装go-bindata
+```ssh
+go get github.com/go-bindata/go-bindata/...
+go get github.com/elazarl/go-bindata-assetfs/...
 
-> Open-source development is not easy. If you feel that my project has helped you, you are welcome to [donate](./doc/donate.md) or buy me a cup of tea☕ (please leave your nickname or name in the note if possible). Your support is my motivation, thank you.
+# go版本>=1.17 使用intsall方式
+go install -a -v github.com/go-bindata/go-bindata/...@latest
+go install -a -v github.com/elazarl/go-bindata-assetfs/...@latest
+```
+## 打包静态文件
 
+```
+go-bindata-assetfs -debug -o=service/assets/bindata.go -pkg=assets static/... view/... # 多个
+go-bindata-assetfs -debug -o=service/assets/bindata.go -pkg=assets assets/...
+```
 
-<a href="https://www.paypal.me/hslrs">
-<img height="60" src="./doc/images/donate/paypal.png" target="_blank"></img> 
-</a>
+## 编译后端
 
+### Windows CMD
+```
+set CGO_ENABLED=1
+go run main.go
+```
+### Windows PowerShell
 
-|   |   |
-| ------------ | ------------ |
-| <img height="300" src="./doc/images/donate/weixin.png"/> |  <img height="300" src="./doc/images/donate/alipay.png" /> |
+```
+$env:CGO_ENABLED=1
+go run main.go
+```
 
-## 🏖️ Communication group & community
+win下需要安装gcc, 推荐安装MSYS2，安装步骤如下
+- 下载 https://github.com/msys2/msys2-installer/releases/download/2025-02-21/msys2-x86_64-20250221.exe 并安装
 
-Author：**[红烧猎人](https://blog.enianteam.com/u/sun/content/11)**
+- 打开MSYS2终端，输入 `pacman -S mingw-w64-ucrt-x86_64-gcc` 安装gcc
 
-[Github Discussions](https://github.com/hslr-s/sun-panel/discussions)
+- 把`C:\msys64\usr\bin`加入环境变量，如果MSYS2安装在不同的目录，需要修改路径
 
-QQ交流群，进不去可以点上方连接联系作者
+- 安装完成后，gcc --version
 
-<img src="./doc/images/qq_group_qr2.png"  height="350" />
+### goland下运行
+添加环境变量 CGO_ENABLED=1
+
+### Linux/Mac
+```
+CGO_ENABLED=1 go run main.go
+```
+
+## 默认账号密码
+| 字段       | 值               |
+|------------|------------------|
+| 账号       | `admin@sun.cc`   |
+| 初始密码   | `12345678`       |
+
+## 命令参数
+| 参数            | 说明                              |
+|-----------------|-----------------------------------|
+| -h              | 查看命令说明                      |
+| -config         | 生成配置文件（conf/conf.ini）     |
+| -password-reset | 重置第一个管理账号的密码          |
+
+## Docker Deployment
+
+```azure
+docker run -d --restart=always -p 3002:3002 \
+-v ~/docker_data/sun-panel/conf:/app/conf \
+-v ~/docker_data/sun-panel/uploads:/app/uploads \
+-v ~/docker_data/sun-panel/database:/app/database \
+--name sun-panel \
+hslr/sun-panel
+```
+
+目录挂载 -v，全部可选，根据自己的需求选择：
+
+| 容器目录         | 说明                          |
+|------------------|-------------------------------|
+| /app/conf        | 配置文件                      |
+| /app/uploads     | 上传的文件                    |
+| /app/database    | 数据库文件                    |
+| /app/runtime     | 运行日志（不推荐挂载）        |
+| /app/web/custom  | 自定义（js、css等）           |
 
 ## ❤️ Thanks
 
-- [Roc](https://github.com/RocCheng)
-- [jackloves111](https://github.com/jackloves111)
-- [Rock.L](https://github.com/gitlyp)
-
-
----
-
-[![Star History Chart](https://api.star-history.com/svg?repos=hslr-s/sun-panel&type=Date)](https://star-history.com/#hslr-s/sun-panel&Date)
+- [sun-panel](https://github.com/hslr-s/sun-panel)
