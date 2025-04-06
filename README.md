@@ -62,8 +62,11 @@ go install -a -v github.com/elazarl/go-bindata-assetfs/...@latest
 ## 打包静态文件
 
 ```
-go-bindata-assetfs -debug -o=service/assets/bindata.go -pkg=assets static/... view/... # 多个
-go-bindata-assetfs -debug -o=service/assets/bindata.go -pkg=assets assets/...
+# 开发环境，修改静态文件后自动编译
+go-bindata-assetfs -debug -o=assets/bindata.go -pkg=assets assets/...
+
+# 正式环境，修改静态文件后需要重新编译
+go-bindata-assetfs -o=assets/bindata.go -pkg=assets assets/...
 ```
 
 ## 编译后端

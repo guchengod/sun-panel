@@ -89,6 +89,7 @@
       "export": "Export configuration",
       "fileModified": "The file has been modified, import with caution",
       "import": "Import configuration",
+			"importHeimdall": "Import Heimdall configuration",
       "moduleIcon": "Icon configuration",
       "moduleStyle": "Style configuration",
       "selectExportData": "Select the configuration data to export",

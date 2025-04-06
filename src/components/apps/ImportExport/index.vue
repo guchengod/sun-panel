@@ -1,5 +1,4 @@
-<script setup lang="ts">
-import { onMounted, ref } from 'vue'
+<script setup lang="ts">import { onMounted, ref } from 'vue'
 import type { UploadFileInfo } from 'naive-ui'
 import { NAlert, NButton, NCheckbox, NCheckboxGroup, NDivider, NInput, NSpace, NUpload, useMessage } from 'naive-ui'
 import { RoundCardModal, SvgIcon } from '@/components/common'
@@ -17,7 +16,7 @@ interface ItemGroup extends Panel.ItemIconGroup {
 
 const ms = useMessage()
 
-const jsonData = ref<string | null>(null)
+const jsonData = ref<string | null > (null)
 const importWarning = ref<string[]>([])
 const importRoundModalShow = ref(false)
 const exportRoundModalShow = ref(false)
@@ -278,6 +277,22 @@ async function handleStartImport() {
           {{ $t('apps.exportImport.export') }}
         </NButton>
       </div>
+			<div class="m-[10px]">
+				<NUpload
+					accept=".json"
+					directory-dnd
+					:default-upload="false"
+					:show-file-list="false"
+					@change="handleFileChange"
+				>
+					<NButton type="info" size="large" :loading="uploadLoading">
+						<template #icon>
+							<SvgIcon icon="fa6:solid-file-import" />
+						</template>
+						{{ $t('apps.exportImport.importHeimdall') }}
+					</NButton>
+				</NUpload>
+			</div>
     </div>
 
     <div class="flex justify-center">
