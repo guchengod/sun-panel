@@ -1,4 +1,5 @@
-<script setup lang="ts">import { onMounted, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import type { UploadFileInfo } from 'naive-ui'
 import { NAlert, NButton, NCheckbox, NCheckboxGroup, NDivider, NInput, NSpace, NUpload, useMessage } from 'naive-ui'
 import { RoundCardModal, SvgIcon } from '@/components/common'
@@ -169,6 +170,24 @@ function handleFileChange(options: { file: UploadFileInfo; fileList: Array<Uploa
   }
 }
 
+function handleFileHChange(options: { file: UploadFileInfo; fileList: Array<UploadFileInfo> }) {
+  uploadLoading.value = true
+  console.log(options.file.file)
+  if (options.file.file) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.result) {
+        jsonData.value = reader.result as string
+      }
+      else {
+        ms.error(`${t('common.failed')}: ${t('common.repeatLater')}`)
+      }
+      uploadLoading.value = false
+    }
+    reader.readAsText(options.file.file)
+  }
+}
+
 // 验证导入文件
 function importCheck() {
   importWarning.value = []
@@ -244,7 +263,7 @@ async function handleStartImport() {
   loading.value = false
   importRoundModalShow.value = false
   ms.success(`${t('common.success')}, ${t('common.refreshPage')}`)
-}
+},
 </script>
 
 <template>
@@ -277,22 +296,22 @@ async function handleStartImport() {
           {{ $t('apps.exportImport.export') }}
         </NButton>
       </div>
-			<div class="m-[10px]">
-				<NUpload
-					accept=".json"
-					directory-dnd
-					:default-upload="false"
-					:show-file-list="false"
-					@change="handleFileChange"
-				>
-					<NButton type="info" size="large" :loading="uploadLoading">
-						<template #icon>
-							<SvgIcon icon="fa6:solid-file-import" />
-						</template>
-						{{ $t('apps.exportImport.importHeimdall') }}
-					</NButton>
-				</NUpload>
-			</div>
+      <div class="m-[10px]">
+        <NUpload
+          accept=".json"
+          directory-dnd
+          :default-upload="false"
+          :show-file-list="false"
+          @change="handleFileHChange"
+        >
+          <NButton type="info" size="large" :loading="uploadLoading">
+            <template #icon>
+              <SvgIcon icon="fa6:solid-file-import" />
+            </template>
+            {{ $t('apps.exportImport.importHeimdall') }}
+          </NButton>
+        </NUpload>
+      </div>
     </div>
 
     <div class="flex justify-center">
